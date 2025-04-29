@@ -1,17 +1,12 @@
 const express = require('express');
+const { sendResponse } = require('../middleware/middleware');
 const router = express.Router();
+ 
 const resetPosts = () => { posts = []; };
-
-
+ 
 let posts = [];
-const sendResponse = (res, statusCode, message, data = null) => {
-    return res.status(statusCode).json({
-        statusCode,
-        message,
-        data,
-    });
-};
-
+ 
+ 
 // Create post
 router.post('/', (req, res) => {
     const { title, content, author } = req.body;
@@ -31,12 +26,11 @@ router.post('/', (req, res) => {
     posts.push(post);
     return sendResponse(res, 201, 'Post created successfully', post);
 });
-
 // Get all posts (R in CRUD)
 router.get('/', (req, res) => {
     return sendResponse(res, 200, 'Posts retrieved successfully', posts);
 });
-
+ 
 // Get post by ID (R in CRUD)
 router.get('/:id', (req, res) => {
     const post = posts.find((u) => u.id === parseInt(req.params.id));
@@ -50,7 +44,7 @@ router.get('/:id', (req, res) => {
  
  
 });
-
+ 
 // Update post (U in CRUD)
 router.put('/:id', (req, res) => {
     const { title, content, author } = req.body;
@@ -67,7 +61,7 @@ router.put('/:id', (req, res) => {
  
     return sendResponse(res, 200, 'Post updated successfully', post);
 });
-
+ 
 // Delete user
 router.delete('/:id', (req, res) => {
     const postIndex = posts.findIndex((u) => u.id === parseInt(req.params.id));
@@ -79,8 +73,8 @@ router.delete('/:id', (req, res) => {
     posts.splice(postIndex, 1);
     return sendResponse(res, 200, 'Post deleted successfully',postIndex); // Status 200 instead of 204
 });
-
-
-
+ 
+ 
+ 
 module.exports = router;
 module.exports.__resetPosts = resetPosts;
